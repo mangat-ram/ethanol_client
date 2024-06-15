@@ -1,30 +1,27 @@
-import { createSlice,createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-
 import {
-  User,
   LoginAuthResponse,
-  AuthState,
   initialState,
-  ThunkInterface
-} from "@/interfaces"
+} from "@/interfaces";
 
-interface Credentials {
-  username: string;
-  password: string;
+export interface Credentials {
+  userName: string;
+  passWord: string;
 }
 
-export const login = createAsyncThunk<LoginAuthResponse['data'], Credentials, {rejectValue: string}>(
+export const login = createAsyncThunk<LoginAuthResponse['data'], Credentials, { rejectValue: string }>(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const res = await axios.post<LoginAuthResponse>(`${process.env.SERVER_ORIGIN}/users/login`, credentials);
+      const res = await axios.post<LoginAuthResponse>(`https://ethanol-09r4.onrender.com/api/v1/users/login`, credentials);
       return res.data.data;
     } catch (error: any) {
-      return rejectWithValue(error.res.data);
+      const errorMessage = error.response?.data?.message || 'An error occurred during login';
+      return rejectWithValue(errorMessage);
     }
   }
-)
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -50,10 +47,10 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action: PayloadAction<string | undefined>) => {
         state.loading = false;
-        state.error = "An error occured at auth slice";
+        state.error = action.payload || "An error occurred at auth slice";
       });
   }
-})
+});
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;

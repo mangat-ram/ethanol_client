@@ -1,11 +1,10 @@
-import { Toaster } from "sonner";
 import type { Metadata } from "next";
 import { Poppins, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { Provider } from "react-redux";
-import store from "@/store/store";
+import ReduxProvider from "@/components/providers/reduxProvider";
+import { Toaster } from "@/components/ui/toaster";
 
-const inter = Poppins({ subsets: ["latin"],weight:"500" });
+const inter = Space_Grotesk({ subsets: ["latin"],weight:"500" });
 //Caveat font can be used for infos 
 
 export const metadata: Metadata = {
@@ -21,10 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Provider store={store}>
-          <Toaster position="bottom-right" />
+        <ReduxProvider>
           {children}
-        </Provider>
+          <Toaster />
+        </ReduxProvider>
       </body>
     </html>
   );

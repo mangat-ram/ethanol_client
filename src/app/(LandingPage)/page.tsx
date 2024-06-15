@@ -1,11 +1,11 @@
+"use client"
 
+import React from "react";
 
-export default function Home() {
-  
-
+const MainPage = () => {
   return (
-    <>
-      <p className="text-5xl text-purple-700">Production App</p>
-    </>
-  );
+    <div className="text-5xl text-red-600">MainPage</div>
+  )
 }
+
+export default MainPage;
