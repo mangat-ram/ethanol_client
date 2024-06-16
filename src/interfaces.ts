@@ -50,3 +50,7 @@ export interface ThunkInterface{
   accessToken: string;
   refreshToken: string;
 }
+
+export interface ChildrenType{
+  children: React.ReactNode
+}

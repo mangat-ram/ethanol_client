@@ -4,7 +4,7 @@ import "./globals.css";
 import ReduxProvider from "@/components/providers/reduxProvider";
 import { Toaster } from "@/components/ui/toaster";
 
-const inter = Space_Grotesk({ subsets: ["latin"],weight:"500" });
+const inter = Poppins({ subsets: ["latin"],weight:"500" });
 //Caveat font can be used for infos 
 
 export const metadata: Metadata = {
