@@ -5,7 +5,6 @@ import { useToast } from "@/components/ui/use-toast"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import * as z from "zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import {
@@ -20,44 +19,40 @@ import { Input } from "@/components/ui/input"
 import { LuLoader2 } from 'react-icons/lu';
 import { loginSchema } from "@/types";
 import Link from "next/link";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { Credentials, login } from "@/store/authSlice";
-import { AppDispatch, RootState } from "@/store/store";
+import { Credentials } from "@/store/authSlice";
+import { useUser } from "@/hooks/useUser";
 
 const SignIn = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter();
   const { toast } = useToast();
-  
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const { login,status,error } = useUser()
+
+  const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      userName:"",
-      passWord: ""
-    }
-  })
-
-  const dispatch: AppDispatch = useDispatch();
-  const { loading, error } = useSelector((state:RootState) => state.auth); 
+      userName: "",
+      passWord: "",
+    },
+  });
 
   const submitLogin = async (credentials: Credentials) => {
     setIsSubmitting(true);
       try {
-        const resultAction = await dispatch(login(credentials));
-        const responsePayload = resultAction.payload; // Await response
-        const username = responsePayload?.user.userName;
-        // console.log(responsePayload);
-        router.push(`/dashboard/${username}`)
+        await login(credentials);
+        if(status === "success"){
+          toast({
+            title: "Success",
+            description: "User Logged In Successfully!",
+          });
+          router.push("/dashboard")
+        }else if(status === "failed"){
+          throw new Error(error as any);
+        }
         
-        toast({
-          title: "Success",
-          description: "User Logged In Successfully!",
-        });
-
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
         toast({
           title: "Login Failed",
           description: "Error in Logging In User!",
@@ -130,7 +125,7 @@ const SignIn = () => {
             <p>
               New to Ethanol ?  
               <Link href="/register" className="text-blue-600 hover:text-blue-800">
-                Register
+                {" "}Register
               </Link>
             </p>
           </span>

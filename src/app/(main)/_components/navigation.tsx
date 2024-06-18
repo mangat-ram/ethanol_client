@@ -7,11 +7,13 @@ import { LuChevronsLeft } from "react-icons/lu";
 import { IoMenu } from "react-icons/io5";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./userItem";
+import { useUser } from "@/hooks/useUser";
 
 const Navigation = () => {
 
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)")
+  const { user } = useUser();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);

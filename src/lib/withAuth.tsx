@@ -1,23 +1,23 @@
-import { RootState } from "@/store/store"
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useSelector } from "react-redux"
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { RootState } from '../store/store'; // Adjust path according to your structure
 
 const withAuth = (WrappedComponent: React.ComponentType) => {
   const ComponentWithAuth = (props: any) => {
-    const authState = useSelector((state: RootState) => state.auth);
     const router = useRouter();
+    const { accessToken } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
-      if(!authState.accessToken){
-        router.push("/");
+      if (!accessToken) {
+        router.push('/login');
       }
-    },[authState, router])
+    }, [accessToken, router]);
 
-    return <WrappedComponent {...props} />
-  }
+    return <WrappedComponent {...props} />;
+  };
 
   return ComponentWithAuth;
-}
+};
 
 export default withAuth;

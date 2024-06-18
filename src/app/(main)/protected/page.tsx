@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/hooks/useUser"
 import withAuth from "@/lib/withAuth";
