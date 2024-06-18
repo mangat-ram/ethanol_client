@@ -10,15 +10,14 @@ export interface Credentials {
   passWord: string;
 }
 
-export const login = createAsyncThunk<LoginAuthResponse['data'], Credentials, { rejectValue: string }>(
+export const login = createAsyncThunk(
   'auth/login',
-  async (credentials, { rejectWithValue }) => {
+  async (credentials: Credentials, thunkAPI) => {
     try {
-      const res = await axios.post<LoginAuthResponse>(`https://ethanol-09r4.onrender.com/api/v1/users/login`, credentials);
+      const res = await axios.post(`https://ethanol-09r4.onrender.com/api/v1/users/login`, credentials);
       return res.data.data;
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'An error occurred during login';
-      return rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -36,17 +35,16 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.status = "loading";
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<LoginAuthResponse['data']>) => {
-        state.loading = false;
+        state.status = "success";
         state.user = action.payload.user;
         state.accessToken = action.payload.accessToken;
         state.refreshToken = action.payload.refreshToken;
       })
-      .addCase(login.rejected, (state, action: PayloadAction<string | undefined>) => {
-        state.loading = false;
+      .addCase(login.rejected, (state, action: PayloadAction<any>) => {
+        state.status = "failed";
         state.error = action.payload || "An error occurred at auth slice";
       });
   }

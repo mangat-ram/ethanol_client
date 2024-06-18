@@ -13,13 +13,25 @@ import {
   DropdownMenuTrigger,
   DropdownMenuLabel
 } from "@/components/ui/dropdown-menu"
-import { useUser } from "@/hooks/useUser";
+
 import { useParams } from "next/navigation";
+import useUser from "@/hooks/useUser";
 
 const UserItem = () => { 
 
-  const username = useParams();
-  const user = useUser(username);
+  const { user,error } = useUser();
+  if(error){
+    if(error === "Unauthorized"){
+      return (
+        <div>Please login to see the content.</div>
+      )
+    }
+    return <div>Error: {error}</div>;
+  }
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
     return (
       <DropdownMenu>

@@ -13,7 +13,7 @@ const api = axios.create({
 
 export async function getCurrentUser() {
   try {
-    const response = await api.get('/users/getUser');
+    const response = await axios.get('https://ethanol-09r4.onrender.com/api/v1/users/getUser');
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status === 401) {

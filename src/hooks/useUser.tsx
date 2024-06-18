@@ -1,7 +1,26 @@
-"use client";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/store/store';
+import { Credentials, login, logout } from '@/store/authSlice';
 
-import { getCurrentUser } from "@/lib/utils";
+export const useUser = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const authState = useSelector((state: RootState) => state.auth);
 
-export default function useUser() {
-  
-}
+  const handleLogin = (credentials: Credentials) => {
+    dispatch(login(credentials));
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  return {
+    user: authState.user,
+    accessToken: authState.accessToken,
+    refreshToken: authState.refreshToken,
+    status: authState.status,
+    error: authState.error,
+    login: handleLogin,
+    logout: handleLogout,
+  };
+};

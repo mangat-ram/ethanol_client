@@ -33,7 +33,7 @@ export interface AuthState {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
-  loading: boolean;
+  status: "idle" | "loading" | "success" | "failed";
   error: string | null;
 }
 
@@ -41,7 +41,7 @@ export const initialState: AuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
-  loading: false,
+  status: "idle",
   error: null,
 };
 
