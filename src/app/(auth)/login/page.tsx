@@ -24,7 +24,6 @@ import { useUser } from "@/hooks/useUser";
 
 const SignIn = () => {
 
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter();
   const { toast } = useToast();
   const { login,status,error } = useUser()
@@ -38,7 +37,7 @@ const SignIn = () => {
   });
 
   const submitLogin = async (credentials: Credentials) => {
-    setIsSubmitting(true);
+    // setIsSubmitting(true);
       try {
         await login(credentials);
         if(status === "success"){
@@ -46,7 +45,7 @@ const SignIn = () => {
             title: "Success",
             description: "User Logged In Successfully!",
           });
-          router.push("/dashboard")
+          router.replace("/dashboard")
         }else if(status === "failed"){
           throw new Error(error as any);
         }
@@ -58,8 +57,6 @@ const SignIn = () => {
           description: "Error in Logging In User!",
           variant: "destructive"
         });
-      } finally {
-        setIsSubmitting(false);
       }
   };
 
@@ -110,9 +107,9 @@ const SignIn = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={status === "loading"}>
                 {
-                    isSubmitting ? (<>
+                    status === "loading" ? (<>
                       <LuLoader2
                         className="mr-2 h-4 w-4 animate-spin" 
                       /> Please wait
