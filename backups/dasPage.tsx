@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { LuLoader2 } from "react-icons/lu";
-import Modal from "@/components/modal";
 
 const DashboardHome: React.FC = () => {
 
@@ -51,14 +50,10 @@ const DashboardHome: React.FC = () => {
     }
   }
 
-  const clearWarning = () => {
-    setIsDialogOpen(false);
-    setWarning("");
-  }
-
   return (
     <div className="h-screen flex flex-col items-center justify-center space-y-4">
-      <Image
+      <Image 
+        
         src="/Questions-bro.png"
         height={300}
         width={300}
@@ -68,28 +63,46 @@ const DashboardHome: React.FC = () => {
       <h2>
         Welcome to {user?.name}&apos;s Ethanol
       </h2>
-      <Modal
-        trigger={
-          <Button className="flex items-center justify-between text-md">
+      <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <AlertDialogTrigger asChild >
+          <Button
+            className="flex items-center justify-between text-md"
+            onClick={() => setIsDialogOpen(true)}
+          >
             <CiBookmarkPlus className="h-6 w-6 mr-2" />
             <span>Create A Project</span>
           </Button>
-        }
-        title="Create A Project"
-        description="Write the name of the project you want to create."
-        actionLabel="Create"
-        cancelLabel="Cancel"
-        onAction={submitLab}
-        loading={loading}
-        onCancel={clearWarning}
-      >
-        <Input
-          placeholder="Your Project Name Here"
-          value={labname}
-          onChange={(e) => setLabname(e.target.value)}
-        />
-        {warning && <p className="text-red-500">{warning}</p>}
-      </Modal>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Create A Project</AlertDialogTitle>
+            <AlertDialogDescription>
+              <span>
+                write the name of the project you want to create.
+              </span>
+              <Input 
+                placeholder="Your Project Name Here" 
+                onChange={(e) => setLabname(e.target.value)} 
+              />
+              {warning && <p className="text-red-500">{warning}</p>}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Button onClick={submitLab} disabled={loading}>
+                {loading ? (<>
+                      <LuLoader2
+                        className="mr-2 h-4 w-4 animate-spin" 
+                      /> Creating...
+                    </>) : ("Create")}
+              </Button>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }
