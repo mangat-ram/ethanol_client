@@ -54,3 +54,14 @@ export interface ThunkInterface{
 export interface ChildrenType{
   children: React.ReactNode
 }
+
+export interface LabType{
+  "_id": string,
+  "labName": string,
+  "labMaker": string,
+  "compounds": Array<any>[],
+  "molecules": Array<any>[],
+  "createdAt": Date,
+  "updatedAt": Date,
+  "__v": number
+}

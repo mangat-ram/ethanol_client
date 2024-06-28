@@ -6,12 +6,12 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import React, { useState } from "react"
 import { useUser } from "@/hooks/useUser";
 import withAuth from "@/lib/withAuth";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { LuLoader2 } from "react-icons/lu";
 import Modal from "@/components/modal";
+import { useRouter } from "next/navigation";
 
 const DashboardHome: React.FC = () => {
 
@@ -21,6 +21,8 @@ const DashboardHome: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [warning, setWarning] = useState<string>("");
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const router = useRouter();
 
   const submitLab = async () => {
     if (!labname.trim()) {
@@ -39,12 +41,15 @@ const DashboardHome: React.FC = () => {
           description:"Project created Successfully"
         })
         setLabname("");
+        router.push(`/dashboard/${user?.userName}/${labname}`);
+        // setIsDialogOpen(true);
       }
     } catch (err:any) {
       console.log("error === ",err);
       toast({
           title:"Failed",
-          description:"Error occurred During project cretion"
+          description:"Error occurred During project creation",
+          variant:"destructive"
         })
     }finally {
       setLoading(false);

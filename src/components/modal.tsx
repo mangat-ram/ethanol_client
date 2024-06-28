@@ -39,6 +39,18 @@ const Modal:React.FC<ModalProps> = ({
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
+  const handleAction = async (closeAfterResponse = true) => {
+    try {
+      await onAction();
+    } catch (error) {
+      console.error("Error in modal action:", error);
+    } finally {
+      if (closeAfterResponse) {
+        setIsDialogOpen(false);
+      }
+    }
+  };
+
   return (
     <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <AlertDialogTrigger asChild>

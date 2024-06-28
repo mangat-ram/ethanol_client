@@ -2,12 +2,20 @@
 
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-import React, { ElementRef, useRef, useState } from "react"
+import React, { ElementRef, useEffect, useRef, useState } from "react"
 import { LuChevronsLeft } from "react-icons/lu";
 import { IoMenu } from "react-icons/io5";
 import { useMediaQuery } from "usehooks-ts";
 import UserItem from "./userItem";
 import { useUser } from "@/hooks/useUser";
+import Item from "./item";
+import { FaSearch } from "react-icons/fa";
+import { LuSettings2 } from "react-icons/lu";
+import { IoMdAddCircle } from "react-icons/io";
+import Projects from "./projects";
+import { LabType } from "@/interfaces";
+import axios from "axios";
+import Items from "./items";
 
 const Navigation = () => {
 
@@ -20,6 +28,23 @@ const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+  const [projects, setProjects] = useState<LabType[]>([]);
+
+  useEffect(() => {
+    const getLabs = async () => {
+      try {
+        const res = await axios.get(`https://ethanol-09r4.onrender.com/api/v1/labs/getLabsByUsername/${user?.userName}`);
+        const projects = res.data.data;
+        console.log(projects);
+        setProjects(projects);
+      } catch (err) {
+        console.log("Some Error occurred in Use Effect:: ",err);
+      }
+    }
+
+    getLabs();
+  },[user?.userName])
+  
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
@@ -101,9 +126,32 @@ const Navigation = () => {
         </div>
         <div>
           <UserItem />
+          <Items
+              label="Search"
+              icon={FaSearch}
+              isSearch
+              bgColor="bg-red-400"
+              onClick={() => {}}
+          />
         </div>
-        <div className="mt-4">
-          <p>Projects</p>
+        <div>
+          <Items
+              label="Settings"
+              icon={LuSettings2}
+              bgColor="bg-green-400"
+              onClick={() => {}}
+          />
+        </div>
+        <div>
+          <Items
+              label="Add New Project"
+              icon={IoMdAddCircle}
+              bgColor="bg-zinc-400"
+              onClick={() => {}}
+          />
+        </div>
+        <div className="">
+          <Projects projects={projects} />
         </div>
         <div
           onMouseDown={handleMouseDown}
@@ -126,4 +174,4 @@ const Navigation = () => {
   )
 }
 
-export default Navigation
+export default Navigation;

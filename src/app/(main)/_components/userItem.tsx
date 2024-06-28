@@ -34,11 +34,11 @@ const UserItem = () => {
         <DropdownMenuTrigger asChild>
           <div 
             role="button"
-            className="flex items-center text-sm p-3 w-full hover:bg-primary/5"
+            className="flex items-center text-sm p-3 w-full bg-yellow-400 text-[1.08rem] hover:bg-yellow-500 text-white"
           >
             <div className="gap-x-2 flex items-center max-w-[150px]">
               <Avatar className="h-5 w-5">
-                <AvatarImage src="/dashome.png" />
+                <AvatarImage src="/one.jpg" />
               </Avatar>
               <span className="text-start font-medium line-clamp-1">
                 {user?.name}&apos;s Ethanol
@@ -60,7 +60,7 @@ const UserItem = () => {
             <div className="flex items-center gap-x-2">
               <div className="rounded-md bg-secondary p-1">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="/dashome.png" />
+                  <AvatarImage src="/one.jpg" />
                 </Avatar>
               </div>
               <div className="space-y-1">
