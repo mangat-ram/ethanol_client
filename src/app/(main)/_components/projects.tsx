@@ -43,11 +43,11 @@ const Projects:React.FC<ProjectProps> = ({ projects = [] }) => {
               role="button"
               key={project._id}
               onClick={() => handleProjectClick(project._id,project.labName)}
-              className={`text-sm font-light cursor-pointer ${
+              className={`py-1 text-sm font-light cursor-pointer ${
                 activeProject === project._id ? "bg-blue-300 text-white rounded-full" : "" // Add "active" class
               }`}
             >
-              <span className="ml-2">{project.labName}</span>
+              <span className="ml-2 p-4">{project.labName}</span>
             </div>
           ))
         ) : (
